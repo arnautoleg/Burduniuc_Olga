@@ -1,0 +1,410 @@
+---
+title: "Burduniuc Olga"
+author: "Arnaut Oleg"
+date: "04 01 2022"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+
+#install.packages("ggpubr")
+#install.packages("table1")
+#install.packages("ggstatplot")
+
+library(readxl)
+library(ggplot2)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(ggstatsplot)
+
+
+```
+
+```{r}
+
+df <- read_excel("C:/Users/Rwork/OneDrive/Desktop/Greta Balan/Burduniuc Olga/Burduniuc_Olga.xlsx")
+
+# Variables transformation in factor
+df$Factor <- as.factor(df$Factor)
+df$Blocks <- as.factor(df$Blocks)
+df$`Nr/p.` <- as.factor(df$`Nr/p.`)
+
+```
+
+```{r}
+
+# Descriptive statistics table
+library(table1)
+
+table1::table1(~. | df$Factor, data = df[, c(2:7)], 
+               render.continuous=c(.="Mean (SD)", 
+                                   .="Median (IQR)", 
+                                   .="[Min, Max]"),
+               topclass="Rtable1-grid"
+)
+
+table1::table1(~. | df$Factor, data = df[, c(8:13)], 
+               render.continuous=c(.="Mean (SD)", 
+                                   .="Median (IQR)", 
+                                   .="[Min, Max]"),
+               topclass="Rtable1-grid"
+)
+
+```
+
+
+
+```{r}
+
+level_order <- c('Martor', 'C1', 'C2', 'N1', 'N2', 'C1+N1', 'C1+N2', 'C2+N1', 'C2+N2') 
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `DAM, µM/L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("DAM, µM/L")+
+  ylim(0,10)
+
+p + scale_fill_discrete(name = "Medicatie")
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = df$ `PPOA,          µM/L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("PPOA, µM/L")+
+  ylim(0, 60)
+
+p + scale_fill_discrete(name = "Medicatie")
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = df$ `SOD,     u/c`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("SOD, u/c")+
+  ylim(600, 1200)
+
+p + scale_fill_discrete(name = "Medicatie")
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `Catalaza, µM/s.L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("Catalaza, µM/s.L")+
+  ylim(0,60)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `AAT cu ABTS, µM/L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("AAT cu ABTS, µM/L")+
+  ylim(0,200)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `G-S-T, nM/s.L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("G-S-T, nM/s.L")+
+  ylim(0,60)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `GPO, nM/s.L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("GPO, nM/s.L")+
+  ylim(0,500)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `GR, nM/s.L`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("GR, nM/s.L")+
+  ylim(0,200)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `TNF, pg/ml`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("TNF, pg/ml")+
+  ylim(0,150)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `IL-6, pg/ml`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("IL-6, pg/ml")+
+  ylim(0,200)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `IL-10, pg/ml`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("IL-10, pg/ml")+
+  ylim(0,130)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+```{r}
+
+p <- ggplot(df, aes(x = factor(Factor, level = level_order), y = `IL-1, pg/ml`, fill = Factor))+
+  geom_jitter(fill='black', color="black", width=0.1)+
+  geom_boxplot(width=0.7) + 
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlab("Medicatie")+
+  ylab("IL-1, pg/ml")+
+  ylim(0,60)
+
+p + scale_fill_discrete(name = "Medicatie")
+
+```
+
+
+```{r}
+
+result <- friedman.test(`DAM, µM/L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`DAM, µM/L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`DAM, µM/L` ~ Factor | Blocks)
+
+```
+
+```{r}
+
+result <- friedman.test(`PPOA,          µM/L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`PPOA,          µM/L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`PPOA,          µM/L` ~ Factor | Blocks)
+
+```
+
+
+
+```{r}
+
+result <- friedman.test(`SOD,     u/c` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`SOD,     u/c`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`SOD,     u/c` ~ Factor | Blocks)
+
+```
+
+
+
+```{r}
+
+result <- friedman.test(`Catalaza, µM/s.L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`Catalaza, µM/s.L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`Catalaza, µM/s.L` ~ Factor | Blocks)
+
+```
+
+
+
+```{r}
+
+result <- friedman.test(`AAT cu ABTS, µM/L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`AAT cu ABTS, µM/L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`AAT cu ABTS, µM/L` ~ Factor | Blocks)
+
+```
+
+
+
+```{r}
+
+result <- friedman.test(`G-S-T, nM/s.L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`G-S-T, nM/s.L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`G-S-T, nM/s.L` ~ Factor | Blocks)
+
+```
+
+
+
+```{r}
+
+result <- friedman.test(`GPO, nM/s.L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`GPO, nM/s.L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`GPO, nM/s.L` ~ Factor | Blocks)
+
+```
+
+
+```{r}
+
+result <- friedman.test(`GR, nM/s.L` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`GR, nM/s.L`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`GR, nM/s.L` ~ Factor | Blocks)
+
+```
+
+```{r}
+
+result <- friedman.test(`IL-1, pg/ml` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`IL-1, pg/ml`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`IL-1, pg/ml` ~ Factor | Blocks)
+
+```
+
+
+```{r}
+
+result <- friedman.test(`TNF, pg/ml` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`TNF, pg/ml`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`TNF, pg/ml` ~ Factor | Blocks)
+
+```
+
+
+result <- friedman.test(`IL-6, pg/ml` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`IL-6, pg/ml`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`IL-6, pg/ml` ~ Factor | Blocks)
+
+
+
+
+```{r}
+
+result <- friedman.test(`IL-6, pg/ml` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`IL-6, pg/ml`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`IL-6, pg/ml` ~ Factor | Blocks)
+
+```
+
+
+```{r}
+
+result <- friedman.test(`IL-10, pg/ml` ~ Factor | Blocks, data = df)
+result
+
+pairwise.wilcox.test(df$`IL-10, pg/ml`, df$Factor, p.adjust.method = "BH", paired = T)
+
+
+df %>% friedman_effsize(`IL-10, pg/ml` ~ Factor | Blocks)
+
+```
